@@ -17,7 +17,7 @@ document.addEventListener('mousemove', function(event) {
     var anguloRadianes = Math.atan2(deltaY, deltaX);
     var anguloGrados = anguloRadianes * (180 / Math.PI) + 90;
 
-    burbuja.style.transform = 'rotateZ(' + anguloGrados + 'deg)';
+    burbuja.style.transform = 'translate(-50%,-50%) rotate(' + anguloGrados + 'deg) ';
 });
 
 // let isTracking = false;
@@ -86,27 +86,22 @@ var startX, startY, offsetX, offsetY;
 
 // Función que se activa cuando se empieza a arrastrar el div
 function startDrag(e) {
-  startX = e.clientX;
-  startY = e.clientY;
-  offsetX = (startX - draggableElement.offsetLeft)/4;
-  offsetY = (startY - draggableElement.offsetTop)/4;
-  console.log(offsetX,offsetY, startX,startY)
-  draggableElement.style.left = offsetX + 'px';
-  draggableElement.style.top = offsetY + 'px';
-  
   // Agregar listeners para el movimiento del mouse
+  startX = 0;
+  startY = 0;
   document.addEventListener('mousemove', drag);
   document.addEventListener('mouseup', endDrag);
 }
 
 // Función para arrastrar el div
 function drag(e) {
-  var newX = offsetX + e.clientX - startX;
-  var newY = offsetY + e.clientY - startY;
-  startX = e.clientX;
-  startY = e.clientY;
-  offsetX = newX;
-  offsetY = newY;
+  e.preventDefault();
+  var newX = draggableElement.getBoundingClientRect().left - (startX-e.clientX) ;
+  startX=e.clientX;
+  var newY = draggableElement.getBoundingClientRect().top - (startY-e.clientY);
+  startY=e.clientY;
+
+  console.log(newX + 'px',newY + 'px')
   
   // Establecer la nueva posición del div
   draggableElement.style.left = newX + 'px';
